@@ -1,1 +1,49 @@
+# ========================
+# Go build and dependencies
+# ========================
+/bin/
+/build/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go vendor directory
+/vendor/
+
+# ========================
+# Env and config
+# ========================
 .env
+.env.local
+.env.*.local
+.envrc
+
+# ========================
+# Logs and temp files
+# ========================
+*.log
+*.tmp
+*.swp
+
+# ========================
+# IDE / Editor
+# ========================
+.vscode/
+.idea/
+*.code-workspace
+
+# ========================
+# OS-specific
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# Node (if using frontend in same repo)
+# ========================
+node_modules/
+dist/
