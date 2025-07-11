@@ -1,0 +1,82 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String          @id @default(uuid())
+  name         String
+  email        String          @unique
+  password     String
+  role         Role
+  level        Level
+  bio          String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  // Relasi
+  stacks       Stack[]         @relation("UserStacks")
+  socialLinks  SocialLinks?
+  sentMessages Message[]       @relation("Sender")
+  receivedMessages Message[]   @relation("Receiver")
+  notifications Notification[]
+}
+
+model Stack {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  users   User[]   @relation("UserStacks")
+}
+
+model SocialLinks {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  instagram   String?
+  linkedin    String?
+  github      String?
+
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  senderId    String
+  receiverId  String
+  content     String
+  sentAt      DateTime @default(now())
+  isRead      Boolean  @default(false)
+
+  sender      User     @relation("Sender", fields: [senderId], references: [id])
+  receiver    User     @relation("Receiver", fields: [receiverId], references: [id])
+}
+
+model Notification {
+  id         String             @id @default(uuid())
+  userId     String
+  title      String
+  message    String
+  type       NotificationType
+  isRead     Boolean            @default(false)
+  createdAt  DateTime           @default(now())
+
+  user       User               @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  UI_UX
+  FRONTEND
+  BACKEND
+  FULLSTACK
+}
+
+enum Level {
+  PEMULA
+  MENENGAH
+  MAHIR
+}
+
+enum NotificationType {
+  CHAT
+  SYSTEM
+  INVITE
+}
