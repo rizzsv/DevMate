@@ -18,5 +18,19 @@ func ValidateUserRegister(user domain.User) error {
 	if len(user.Password) < 6 {
 		return utils.NewHttpError(400, "Password must be at least 6 characters long")
 	}
+
+	if user.Level == "" {
+		return utils.NewHttpError(400, "User level is required")
+	}
+
+	validLevels := map[string]bool{
+		"basic": true,
+		"intermediate": true,
+		"advanced": true,
+	}
+
+	if !validLevels[user.Level] {
+		return utils.NewHttpError(400, "Invalid user level, must be one of: basic, intermediate, advanced")
+	}
 	return nil
 }

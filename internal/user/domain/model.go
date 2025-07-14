@@ -8,7 +8,7 @@ type User struct {
 	Email string `gorm:"unique"`
 	Password string
 	Role string
-	Level string
+	Level string `gorm: "type:VARCHAR(20);check:level IN ('basic', 'intermediate', 'advanced')"`
 	Bio *string
 	CreatedAt time.Time
 	UpdatedAt time.Time

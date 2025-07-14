@@ -15,5 +15,7 @@ func UserRoutes(routes fiber.Router) {
 	handler := handler.NewUserHandler(service)
 
 	routes.Post("/register", handler.Register)
-	routes.Get("/users", handler.GetAll)
+	routes.Get("/user", handler.GetAll)
+
+	routes.Post("/login", handler.Login)
 }

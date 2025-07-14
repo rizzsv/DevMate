@@ -7,11 +7,18 @@ import (
 	"devteamhub_be/middleware"
 	"devteamhub_be/utils"
 	"log"
-
+	_ "net/http/pprof"
+	"net/http"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	// "devteamhub_be/internal/routes"
 )
+
+func init() {
+	go func() {
+		log.Println(http.ListenAndServe("localhost:3000", nil))
+	}()
+}
 
 func main() {
 	err := godotenv.Load()
