@@ -8,7 +8,9 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
+func getJWTSecret() []byte {
+	return []byte(os.Getenv("JWT_SECRET"))
+}
 
 // GenerateJWT membuat token JWT dari userID dan email
 func GenerateJWT(userID, email string) (string, error) {
@@ -19,7 +21,7 @@ func GenerateJWT(userID, email string) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtSecret)
+	return token.SignedString(getJWTSecret())
 }
 
 // ValidateJWT memverifikasi token dan mengembalikan claims-nya
@@ -29,7 +31,7 @@ func ValidateJWT(tokenStr string) (jwt.MapClaims, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("unexpected signing method")
 		}
-		return jwtSecret, nil
+		return getJWTSecret(), nil
 	})
 
 	if err != nil || !token.Valid {

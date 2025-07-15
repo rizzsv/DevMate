@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"log"
 	"os"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
-func ConnectDatabase(){
+func ConnectDatabase() {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=require TimeZone=Asia/Jakarta",
 		os.Getenv("DB_HOST"),
@@ -21,12 +20,17 @@ func ConnectDatabase(){
 		os.Getenv("DB_PORT"),
 	)
 
-	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		PrepareStmt: false,
+	// Gunakan postgres.Config + PreferSimpleProtocol
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true, // ✅ matikan prepared statement dari driver
+	}), &gorm.Config{
+		PrepareStmt: false, // ✅ matikan statement cache GORM
 	})
+
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
-	DB = database
+	DB = db
 }
